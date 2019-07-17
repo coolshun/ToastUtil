@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ToastUtil Sample</string>
     <string name="normal_mode">normal mode</string>
+    <string name="normal_mode_center">normal mode center</string>
     <string name="replaceable_mode">replaceable mode</string>
     <string name="length_long_normal">length long (normal)</string>
     <string name="length_long_replaceable">length long (replaceable)</string>

@@ -2,6 +2,7 @@ package tech.gujin.toast.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 
 import java.util.concurrent.ExecutorService;
@@ -13,6 +14,7 @@ import tech.gujin.toast.sample.runnable.ToastRunnable;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private int mNormalCount;
+    private int mNormalCenterCount;
     private int mReplaceableCount;
     private int mLongNormalCount;
     private int mLongReplaceableCount;
@@ -31,6 +33,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void setListener() {
         findViewById(R.id.btn_normal).setOnClickListener(this);
+        findViewById(R.id.btn_normal_center).setOnClickListener(this);
         findViewById(R.id.btn_replaceable).setOnClickListener(this);
         findViewById(R.id.btn_long_normal).setOnClickListener(this);
         findViewById(R.id.btn_long_replaceable).setOnClickListener(this);
@@ -43,6 +46,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_normal:
                 ToastUtil.show("normal" + ++mNormalCount);
+                break;
+            case R.id.btn_normal_center:
+                ToastUtil.show("normal" + ++mNormalCenterCount,Gravity.CENTER);
                 break;
             case R.id.btn_replaceable:
                 ToastUtil.show("replaceable " + ++mReplaceableCount, ToastUtil.Mode.REPLACEABLE);

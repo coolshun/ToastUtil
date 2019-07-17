@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 public class ToastUtil {
@@ -14,9 +15,11 @@ public class ToastUtil {
     private static Context sContext;
     private static boolean initialized;
     private static Mode sDefaultMode;
+    private static int sDefaultGravity;
     private static ToastUtilHandler sHandler;
     private static Toast sToast;
     private static int sDuration;
+    private static int sGravity;
 
     /**
      * Initialize util.
@@ -47,8 +50,8 @@ public class ToastUtil {
 
         // nullable
         sDefaultMode = mode;
+        sDefaultGravity=Gravity.BOTTOM;
         sHandler = new ToastUtilHandler(Looper.getMainLooper());
-
         initialized = true;
     }
 
@@ -86,6 +89,10 @@ public class ToastUtil {
         show(text, false, sDefaultMode);
     }
 
+    public static void show(CharSequence text, int gravity) {
+        show(text, false,gravity, sDefaultMode);
+    }
+
     /**
      * Show a toast with the text form a resource.
      *
@@ -94,6 +101,10 @@ public class ToastUtil {
      */
     public static void show(int resId, boolean durationLong) {
         show(sContext.getText(resId), durationLong, sDefaultMode);
+    }
+
+    public static void show(int resId, boolean durationLong,int gravity) {
+        show(sContext.getText(resId), durationLong,gravity, sDefaultMode);
     }
 
     /**
@@ -106,6 +117,10 @@ public class ToastUtil {
         show(text, durationLong, sDefaultMode);
     }
 
+    public static void show(CharSequence text,int gravity, boolean durationLong) {
+        show(text, durationLong,gravity, sDefaultMode);
+    }
+
     /**
      * Show a toast with the text form a resource.
      *
@@ -114,6 +129,10 @@ public class ToastUtil {
      */
     public static void show(int resId, Mode mode) {
         show(sContext.getText(resId), false, mode);
+    }
+
+    public static void show(int resId,int gravity, Mode mode) {
+        show(sContext.getText(resId), false,gravity, mode);
     }
 
     /**
@@ -126,6 +145,10 @@ public class ToastUtil {
         show(text, false, mode);
     }
 
+    public static void show(CharSequence text,int gravity, Mode mode) {
+        show(text, false, gravity,mode);
+    }
+
     /**
      * Show a toast with the text form a resource.
      *
@@ -134,7 +157,11 @@ public class ToastUtil {
      * @param mode         The display mode to use.  Either {@link Mode#NORMAL} or {@link Mode#REPLACEABLE}
      */
     public static void show(int resId, boolean durationLong, Mode mode) {
-        show(sContext.getText(resId), durationLong, mode);
+        show(sContext.getText(resId), durationLong,sDefaultGravity, mode);
+    }
+
+    public static void show(int resId, boolean durationLong, int gravity, Mode mode) {
+        show(sContext.getText(resId), durationLong,gravity, mode);
     }
 
     /**
@@ -145,21 +172,42 @@ public class ToastUtil {
      * @param mode         The display mode to use.  Either {@link Mode#NORMAL} or {@link Mode#REPLACEABLE}
      */
     public static void show(CharSequence text, boolean durationLong, Mode mode) {
+        show( text,  durationLong,  sDefaultGravity,  mode) ;
+    }
+
+    /**
+     * Show a toast.
+     *
+     * @param text         The text to show.
+     * @param durationLong Whether the toast show for a long period of time?
+     * @param gravity      location in screen
+     * @param mode         The display mode to use.  Either {@link Mode#NORMAL} or {@link Mode#REPLACEABLE}
+     */
+    public static void show(CharSequence text, boolean durationLong, int gravity, Mode mode) {
         final int duration = durationLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT;
 
+        int yOffset=0;
+        if(gravity==Gravity.BOTTOM) yOffset=  dip2px(sContext,64);
+
         if (mode != Mode.REPLACEABLE) {
-            Toast.makeText(sContext, text, duration).show();
+           Toast toast= Toast.makeText(sContext, text, duration);
+           toast.setGravity(gravity,0,yOffset);
+           toast.show();
             return;
         }
 
-        if (sToast == null || sDuration != duration) {
+        if (sToast == null || sDuration != duration || sGravity != gravity) {
             sDuration = duration;
+            sGravity=gravity;
             sToast = Toast.makeText(sContext, text, duration);
+            sToast.setGravity(gravity,0,yOffset);
         } else {
             try {
                 sToast.setText(text);
             } catch (RuntimeException e) {
                 sToast = Toast.makeText(sContext, text, duration);
+                sToast.setGravity(gravity,0,yOffset);
+                e.printStackTrace();
             }
         }
         sToast.show();
@@ -288,5 +336,10 @@ public class ToastUtil {
     }
 
     private ToastUtil() {
+    }
+
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

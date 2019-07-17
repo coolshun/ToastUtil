@@ -10,6 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/normal_mode"/>
+    <Button
+        android:id="@+id/btn_normal_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/normal_mode_center"/>
 
     <Button
         android:id="@+id/btn_replaceable"
