@@ -77,7 +77,14 @@ public class ToastUtil {
      * @param resId The resource id of the string resource to use.
      */
     public static void show(int resId) {
-        show(sContext.getText(resId), false, sDefaultMode);
+        show(sContext.getText(resId), false,sDefaultGravity, sDefaultMode);
+    }
+
+    public static void show(int resId,int gravity) {
+        show(sContext.getText(resId), false,gravity, sDefaultMode);
+    }
+    public static void showCenter(int resId) {
+        show(sContext.getText(resId), false,Gravity.CENTER, sDefaultMode);
     }
 
     /**
@@ -93,6 +100,10 @@ public class ToastUtil {
         show(text, false,gravity, sDefaultMode);
     }
 
+    public static void showCenter(CharSequence text) {
+        show(text, false,Gravity.CENTER, sDefaultMode);
+    }
+
     /**
      * Show a toast with the text form a resource.
      *
@@ -105,6 +116,10 @@ public class ToastUtil {
 
     public static void show(int resId, boolean durationLong,int gravity) {
         show(sContext.getText(resId), durationLong,gravity, sDefaultMode);
+    }
+
+    public static void showCenter(int resId, boolean durationLong) {
+        show(sContext.getText(resId), durationLong,Gravity.CENTER, sDefaultMode);
     }
 
     /**
